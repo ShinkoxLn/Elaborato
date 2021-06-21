@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -68,6 +68,10 @@ function googleTranslateElementInit() {
 			if ($conn->connect_error) {
 				die("Connection failed: " . $conn->connect_error);
 			  }
+$id=$_GET['id'];
+$query="UPDATE post SET views=views+1 WHERE post.idPost='$id'";
+$ris=$conn->query($query);
+
 			  if(isset($_SESSION["username"])){
 			  $sql = "SELECT id FROM utente WHERE utente.nick='$user'";
 			  $result = $conn->query($sql);
@@ -117,7 +121,11 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
-	<div id="sidebar" class="span3">
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
+<!-- Sidebar ================================================== -->
+<div id="sidebar" class="span3">
 	<?php
 	$servername = "localhost";
 	$username = "root";
@@ -135,7 +143,7 @@ function googleTranslateElementInit() {
 	  GROUP BY Categoria";
 	  $result = $conn->query($sql);
 
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
+		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>$num Items in your cart </a></div>";
 		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
 		if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
@@ -167,146 +175,82 @@ function googleTranslateElementInit() {
 			  </div>
 	</div>
 <!-- Sidebar end=============================================== -->
-	<div class="span9">
+<div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
-    </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
-			</div>
-		</div>	
-
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
-		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
-		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
-		</div>
-	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
-</div>
-
-</div>
-</div>
-</div>
-</div>
-<!-- MainBody End ============================= -->
+    <li><a href="forum.php">Forum</a> <span class="divider">/</span></li>
+    <li class ="active">Post</a></li>
+    </ul>	
+    <div class="row">
+    <div id="gallery" class="span3">
+			<?php
+			$servername = "localhost";
+			$username = "root";
+			$password = "";
+			$db="importexportcn";
+			
+			// Create connection
+			$conn = new mysqli($servername, $username, $password,$db);
+			if ($conn->connect_error) {
+				die("Connection failed: " . $conn->connect_error);
+			  }
+			  $id=$_GET['id'];
+			  $sql = "SELECT * FROM post WHERE idPost='$id'";
+			  $result = $conn->query($sql);
+			  $row = $result->fetch_assoc();
+			echo"
+            <a href='themes/images/Forum/$row[url]'>
+				<img src='themes/images/Forum/$row[url]' style='width:100%' alt=''/>
+            </a>";
+			?>
+            </div>
+            <div class="span6">
+				<?php echo"<h3>$row[titolo]</h3> "?>
+				<hr class="soft"/>
+				<?php echo"<p>
+				$row[descrizione]
+				</p>";
+                $sql="SELECT * from messaggio WHERE idPost=$row[idPost] GROUP BY data DESC";
+                $result= $conn->query($sql);
+                ?>
+            </div>
+            </div><br>
+            <?php 
+            while($row = $result->fetch_assoc()) {
+                $query="SELECT utente.nick FROM utente WHERE utente.id=$row[id]";
+                $ris= $conn->query($query);
+                $riga=$ris->fetch_assoc();
+                echo"<div class='well'>
+                <h5>$riga[nick] :<h5>
+                <p>$row[contenuto]</p>
+                <h7 class='pull-right'>$row[data]</h7>
+                </div>";
+            }
+            echo"
+            <form action='reply.php?id=$id' method='post'>
+            <label for='reply'>Your answer:</label>
+            <textarea class='span6'id='reply' name='reply' rows='10' cols='50' placeholder='Your answer...'> 
+            </textarea>
+             <br>
+            <input type='submit' value='Submit'>
+            </form>";
+?>
+</div></div></div>
 <!-- Footer ================================================================== -->
-	<div  id="footerSection">
+<div  id="footerSection">
 	<div class="container">
 		<div class="row">
 			<div class="span3">
 				<h5>ACCOUNT</h5>
-				<a href="login.html">YOUR ACCOUNT</a>
-				<a href="login.html">PERSONAL INFORMATION</a> 
-				<a href="login.html">ADDRESSES</a> 
-				<a href="login.html">DISCOUNT</a>  
-				<a href="login.html">ORDER HISTORY</a>
+				<a href="login.php">YOUR ACCOUNT</a>
+				<a href="login.php">PERSONAL INFORMATION</a> 
+				<a href="login.php">ADDRESSES</a> 
+				<a href="login.php">DISCOUNT</a>  
+				<a href="login.php">ORDER HISTORY</a>
 			 </div>
 			<div class="span3">
 				<h5>INFORMATION</h5>
 				<a href="contact.html">CONTACT</a>  
-				<a href="register.html">REGISTRATION</a>  
+				<a href="register.php">REGISTRATION</a>  
 				<a href="legal_notice.html">LEGAL NOTICE</a>  
 				<a href="tac.html">TERMS AND CONDITIONS</a> 
 				<a href="faq.html">FAQ</a>
@@ -321,12 +265,12 @@ function googleTranslateElementInit() {
 			 </div>
 			<div id="socialMedia" class="span3 pull-right">
 				<h5>SOCIAL MEDIA </h5>
-				<a href="#"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
+				<a href="https://www.facebook.com/"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
+				<a href="https://www.twitter.com/"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
+				<a href="https://www.youtube.com/"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
 			 </div> 
 		 </div>
-		<p class="pull-right">&copy; Bootshop</p>
+		<p class="pull-right">&copy; ImportExportChina</p>
 	</div><!-- Container End -->
 	</div>
 <!-- Placed at the end of the document so the pages load faster ============================================= -->

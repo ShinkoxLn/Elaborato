@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -117,25 +117,20 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
-	<div id="sidebar" class="span3">
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
+<!-- Sidebar ================================================== -->
+<div id="sidebar" class="span3">
 	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db="importexportcn";
-	
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	  }
+
 
 	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
 	  FROM `prodotto`
 	  GROUP BY Categoria";
 	  $result = $conn->query($sql);
 
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
+		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>$num Items in your cart </a></div>";
 		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
 		if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
@@ -155,7 +150,7 @@ function googleTranslateElementInit() {
 			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
 			<div class='caption'>
 			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
+				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=product_details.php?id=$row[CodiceProdotto]>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
 			</div>
 		  </div><br/>";
 		?>
@@ -170,143 +165,58 @@ function googleTranslateElementInit() {
 	<div class="span9">
     <ul class="breadcrumb">
 		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
+		<li class="active">Terms and Conditions</li>
     </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
-			</div>
-		</div>	
-
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
-		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
-		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
-		</div>
-	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
+	<h3> Terms and Conditions</h3>	
+	<hr class="soft"/>
+	<h5>Lorem ipsum dolor sit amet</h5><br/>
+	<p>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum varius dapibus. Sed hendrerit porta felis at sollicitudin. Sed at nunc ac neque semper fermentum. Proin diam sem, semper fermentum eleifend nec, viverra ac est. Sed ultricies, lectus et vehicula imperdiet, felis tortor vehicula turpis, non fermentum enim est et sapien. Nam justo mi, dignissim a euismod ut, pretium sed leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In viverra porta est, consequat elementum metus tristique a. Mauris tempus tellus a metus dapibus faucibus egestas lectus consectetur. Integer libero dolor, luctus non congue vitae, tempus ut neque. Nunc eleifend lorem quis diam pharetra sagittis. Aliquam ut dolor dui. Fusce dictum facilisis ipsum eu porttitor. In ultricies rhoncus tortor vitae tincidunt.
+</p>
+<h5>Lorem ipsum dolor sit amet</h5><br/>
+<p>
+Nullam a vulputate leo. Nulla tristique metus eros. Curabitur ultrices commodo mauris, sit amet faucibus lectus fermentum in. Nulla eleifend, augue hendrerit tempus faucibus, diam lacus aliquet urna, eget facilisis turpis risus quis arcu. Cras placerat suscipit sem, ac consequat dui iaculis eu. Cras elit enim, adipiscing lobortis rutrum ac, vehicula nec massa. Praesent pharetra ligula ac erat venenatis feugiat. Quisque id nulla mi. Mauris at orci nec nisi eleifend auctor. Mauris placerat consectetur tincidunt. Nam eu tellus vitae dolor vestibulum commodo. Etiam tristique, urna ac convallis laoreet, enim enim aliquet neque, id cursus risus nulla sed ligula. Nunc quam libero, accumsan vitae consequat at, sollicitudin eget mi. Phasellus in molestie diam. Aliquam enim purus, tempor id sodales non, volutpat eu diam. Donec eu nisl lacinia leo semper lobortis sed sit amet elit.
+</p>
+<h5>Lorem ipsum dolor sit amet</h5><br/>
+<p>
+Aliquam interdum, ipsum a posuere dictum, tellus risus blandit dolor, at tristique sapien urna vel purus. Pellentesque in dictum urna. Sed feugiat libero sit amet arcu malesuada eu convallis dui convallis. Donec facilisis massa a ipsum aliquam lobortis. Praesent ac lectus sed leo aliquam egestas. Sed ante neque, volutpat ac tempor et, bibendum at ligula. Nunc porta vestibulum sodales.
+	</p>
+	<h5>Lorem ipsum dolor sit amet</h5><br/>
+<p>
+Nullam a vulputate leo. Nulla tristique metus eros. Curabitur ultrices commodo mauris, sit amet faucibus lectus fermentum in. Nulla eleifend, augue hendrerit tempus faucibus, diam lacus aliquet urna, eget facilisis turpis risus quis arcu. Cras placerat suscipit sem, ac consequat dui iaculis eu. Cras elit enim, adipiscing lobortis rutrum ac, vehicula nec massa. Praesent pharetra ligula ac erat venenatis feugiat. Quisque id nulla mi. Mauris at orci nec nisi eleifend auctor. Mauris placerat consectetur tincidunt. Nam eu tellus vitae dolor vestibulum commodo. Etiam tristique, urna ac convallis laoreet, enim enim aliquet neque, id cursus risus nulla sed ligula. Nunc quam libero, accumsan vitae consequat at, sollicitudin eget mi. Phasellus in molestie diam. Aliquam enim purus, tempor id sodales non, volutpat eu diam. Donec eu nisl lacinia leo semper lobortis sed sit amet elit.
+</p>
+<h5>Lorem ipsum dolor sit amet</h5><br/>
+<p>
+Aliquam interdum, ipsum a posuere dictum, tellus risus blandit dolor, at tristique sapien urna vel purus. Pellentesque in dictum urna. Sed feugiat libero sit amet arcu malesuada eu convallis dui convallis. Donec facilisis massa a ipsum aliquam lobortis. Praesent ac lectus sed leo aliquam egestas. Sed ante neque, volutpat ac tempor et, bibendum at ligula. Nunc porta vestibulum sodales.
+	</p>
+	<h5>Lorem ipsum dolor sit amet</h5><br/>
+<p>
+Nullam a vulputate leo. Nulla tristique metus eros. Curabitur ultrices commodo mauris, sit amet faucibus lectus fermentum in. Nulla eleifend, augue hendrerit tempus faucibus, diam lacus aliquet urna, eget facilisis turpis risus quis arcu. Cras placerat suscipit sem, ac consequat dui iaculis eu. Cras elit enim, adipiscing lobortis rutrum ac, vehicula nec massa. Praesent pharetra ligula ac erat venenatis feugiat. Quisque id nulla mi. Mauris at orci nec nisi eleifend auctor. Mauris placerat consectetur tincidunt. Nam eu tellus vitae dolor vestibulum commodo. Etiam tristique, urna ac convallis laoreet, enim enim aliquet neque, id cursus risus nulla sed ligula. Nunc quam libero, accumsan vitae consequat at, sollicitudin eget mi. Phasellus in molestie diam. Aliquam enim purus, tempor id sodales non, volutpat eu diam. Donec eu nisl lacinia leo semper lobortis sed sit amet elit.
+</p>
+<h5>Lorem ipsum dolor sit amet</h5><br/>
+<p>
+Aliquam interdum, ipsum a posuere dictum, tellus risus blandit dolor, at tristique sapien urna vel purus. Pellentesque in dictum urna. Sed feugiat libero sit amet arcu malesuada eu convallis dui convallis. Donec facilisis massa a ipsum aliquam lobortis. Praesent ac lectus sed leo aliquam egestas. Sed ante neque, volutpat ac tempor et, bibendum at ligula. Nunc porta vestibulum sodales.
+	</p>
 </div>
-
-</div>
-</div>
-</div>
+</div></div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->
-	<div  id="footerSection">
+<div  id="footerSection">
 	<div class="container">
 		<div class="row">
 			<div class="span3">
 				<h5>ACCOUNT</h5>
-				<a href="login.html">YOUR ACCOUNT</a>
-				<a href="login.html">PERSONAL INFORMATION</a> 
-				<a href="login.html">ADDRESSES</a> 
-				<a href="login.html">DISCOUNT</a>  
-				<a href="login.html">ORDER HISTORY</a>
+				<a href="login.php">YOUR ACCOUNT</a>
+				<a href="login.php">PERSONAL INFORMATION</a> 
+				<a href="login.php">ADDRESSES</a> 
+				<a href="login.php">DISCOUNT</a>  
+				<a href="login.php">ORDER HISTORY</a>
 			 </div>
 			<div class="span3">
 				<h5>INFORMATION</h5>
 				<a href="contact.html">CONTACT</a>  
-				<a href="register.html">REGISTRATION</a>  
+				<a href="register.php">REGISTRATION</a>  
 				<a href="legal_notice.html">LEGAL NOTICE</a>  
 				<a href="tac.html">TERMS AND CONDITIONS</a> 
 				<a href="faq.html">FAQ</a>
@@ -321,12 +231,12 @@ function googleTranslateElementInit() {
 			 </div>
 			<div id="socialMedia" class="span3 pull-right">
 				<h5>SOCIAL MEDIA </h5>
-				<a href="#"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
+				<a href="https://www.facebook.com/"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
+				<a href="https://www.twitter.com/"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
+				<a href="https://www.youtube.com/"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
 			 </div> 
 		 </div>
-		<p class="pull-right">&copy; Bootshop</p>
+		<p class="pull-right">&copy; ImportExportChina</p>
 	</div><!-- Container End -->
 	</div>
 <!-- Placed at the end of the document so the pages load faster ============================================= -->

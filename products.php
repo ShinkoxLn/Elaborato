@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -117,25 +117,20 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
+<!-- Sidebar ================================================== -->
 	<div id="sidebar" class="span3">
 	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db="importexportcn";
-	
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	  }
 
+if(isset($_SESSION["username"])){
 	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
 	  FROM `prodotto`
 	  GROUP BY Categoria";
 	  $result = $conn->query($sql);
 
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
+		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>$num Items in your cart </a></div>";
 		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
 		if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
@@ -144,6 +139,7 @@ function googleTranslateElementInit() {
 	  } else {
 		echo "0 results";
 	  }
+	}
 	  
 		echo"</ul><br/>";
 		$sql="SELECT MAX(media.top) AS max,media.CodiceProdotto,media.prezzo,media.url FROM(
@@ -155,7 +151,7 @@ function googleTranslateElementInit() {
 			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
 			<div class='caption'>
 			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
+				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=product_details.php?id=$row[CodiceProdotto]>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
 			</div>
 		  </div><br/>";
 		?>
@@ -169,144 +165,100 @@ function googleTranslateElementInit() {
 <!-- Sidebar end=============================================== -->
 	<div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
+		<li><a href="index.php">Home</a> <span class="divider">/</span></li>
+		<li class="active">Products</li>
     </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
+	<?php 
+	error_reporting(0);
+	$arg=$_GET['arg'];
+	$argu=$_POST['arg'];
+	$sql="SELECT * FROM prodotto WHERE Categoria='$arg' OR Categoria='$argu' OR nome='$arg' OR nome='$argu'";
+	$query="SELECT COUNT(*) AS num FROM prodotto WHERE Categoria='$arg' OR Categoria='$argu' OR nome='$arg' OR nome='$argu'";
+	$result = $conn->query($sql);
+	$ris=$conn->query($query);
+	$row = $ris->fetch_assoc();
+	if(isset($arg)){
+	echo "<h3>$arg<small class='pull-right'> $row[num] products are available </small></h3>";
+	}else if(isset($argu)){
+	echo "<h3>$argu<small class='pull-right'> $row[num] products are available </small></h3>";
+	}
+	?>
+	<hr class="soft"/>
+<div id="myTab" class="pull-right">
+ <a href="#listView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-list"></i></span></a>
+ </div>
+<br class="clr"/>
+<div class="tab-content ">
+	<div class="tab-pane active" id="listView">
+		
+		<?php if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+		  echo "
+		  <div class='row'>
+			<div class='span2'>
+				<img src='themes/images/products/$row[url]' alt=''/>
 			</div>
-		</div>	
+			<div class='span4'>
+				<h3>New | Available</h3>				
+				<hr class='soft'/>
+				<h5>$row[nome]</h5>
+				<p>
+				$row[descrizione]
+				</p>
+				<a class='btn btn-small pull-right' href='product_details.php?id=$row[CodiceProdotto]'>View Details</a>
+				<br class='clr'/>
+			</div>
+			<div class='span3 alignR'>
+			<form class='form-horizontal qtyFrm'>
+			<h3> $row[prezzo] €</h3>
+			<label class='checkbox'>
+				<input type='checkbox'>  Adds product to compair
+			</label><br/>
+			
+			  <a href='product_details.php?id=$row[CodiceProdotto]' class='btn btn-large btn-primary'> Add to <i class=' icon-shopping-cart'></i></a>
+			  <a href='product_details.php?id=$row[CodiceProdotto]' class='btn btn-large'><i class='icon-zoom-in'></i></a>
+			
+				</form>
+			</div>
+		</div>
+		<hr class='soft'/>
+	";}}?>
+		</div>
 
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
+	<a href="compair.php" class="btn btn-large pull-right">Compair Product</a>
+	<div class="pagination">
+			<ul>
+			<li><a href="#">&lsaquo;</a></li>
+			<li><a href="#">1</a></li>
+			<li><a href="#">2</a></li>
+			<li><a href="#">3</a></li>
+			<li><a href="#">4</a></li>
+			<li><a href="#">...</a></li>
+			<li><a href="#">&rsaquo;</a></li>
+			</ul>
 			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
-		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
-		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
-		</div>
-	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
-</div>
-
+			<br class="clr"/>
 </div>
 </div>
 </div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->
-	<div  id="footerSection">
+<div  id="footerSection">
 	<div class="container">
 		<div class="row">
 			<div class="span3">
 				<h5>ACCOUNT</h5>
-				<a href="login.html">YOUR ACCOUNT</a>
-				<a href="login.html">PERSONAL INFORMATION</a> 
-				<a href="login.html">ADDRESSES</a> 
-				<a href="login.html">DISCOUNT</a>  
-				<a href="login.html">ORDER HISTORY</a>
+				<a href="login.php">YOUR ACCOUNT</a>
+				<a href="login.php">PERSONAL INFORMATION</a> 
+				<a href="login.php">ADDRESSES</a> 
+				<a href="login.php">DISCOUNT</a>  
+				<a href="login.php">ORDER HISTORY</a>
 			 </div>
 			<div class="span3">
 				<h5>INFORMATION</h5>
 				<a href="contact.html">CONTACT</a>  
-				<a href="register.html">REGISTRATION</a>  
+				<a href="register.php">REGISTRATION</a>  
 				<a href="legal_notice.html">LEGAL NOTICE</a>  
 				<a href="tac.html">TERMS AND CONDITIONS</a> 
 				<a href="faq.html">FAQ</a>
@@ -321,12 +273,12 @@ function googleTranslateElementInit() {
 			 </div>
 			<div id="socialMedia" class="span3 pull-right">
 				<h5>SOCIAL MEDIA </h5>
-				<a href="#"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
+				<a href="https://www.facebook.com/"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
+				<a href="https://www.twitter.com/"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
+				<a href="https://www.youtube.com/"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
 			 </div> 
 		 </div>
-		<p class="pull-right">&copy; Bootshop</p>
+		<p class="pull-right">&copy; ImportExportChina</p>
 	</div><!-- Container End -->
 	</div>
 <!-- Placed at the end of the document so the pages load faster ============================================= -->

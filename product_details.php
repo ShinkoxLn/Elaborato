@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -68,6 +68,7 @@ function googleTranslateElementInit() {
 			if ($conn->connect_error) {
 				die("Connection failed: " . $conn->connect_error);
 			  }
+			  $num=0;
 			  if(isset($_SESSION["username"])){
 			  $sql = "SELECT id FROM utente WHERE utente.nick='$user'";
 			  $result = $conn->query($sql);
@@ -117,25 +118,20 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
+<!-- Sidebar ================================================== -->
 	<div id="sidebar" class="span3">
 	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db="importexportcn";
-	
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	  }
+
 
 	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
 	  FROM `prodotto`
 	  GROUP BY Categoria";
 	  $result = $conn->query($sql);
 
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
+		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>$num Items in your cart </a></div>";
 		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
 		if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
@@ -155,7 +151,7 @@ function googleTranslateElementInit() {
 			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
 			<div class='caption'>
 			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
+				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=product_details.php?id=$row[CodiceProdotto]>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
 			</div>
 		  </div><br/>";
 		?>
@@ -169,127 +165,224 @@ function googleTranslateElementInit() {
 <!-- Sidebar end=============================================== -->
 	<div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
-    </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
+    <li><a href="index.php">Home</a> <span class="divider">/</span></li>
+    <li><a href="products.php">Products</a> <span class="divider">/</span></li>
+    <li class="active">product Details</li>
+    </ul>	
+	<div class="row">	  
+			<div id="gallery" class="span3">
+			<?php
+			$servername = "localhost";
+			$username = "root";
+			$password = "";
+			$db="importexportcn";
+			
+			// Create connection
+			$conn = new mysqli($servername, $username, $password,$db);
+			if ($conn->connect_error) {
+				die("Connection failed: " . $conn->connect_error);
+			  }
+			  $id=$_GET["id"];
+			  $sql = "SELECT * FROM prodotto
+			  WHERE CodiceProdotto='$id'";
+			  $result = $conn->query($sql);
+			  $row = $result->fetch_assoc();
+			echo"
+            <a href='themes/images/products/$row[url]' title='$row[nome]'>
+				<img src='themes/images/products/$row[url]' style='width:100%' alt=''/>
+            </a>";
+			?>
+			 <div class="btn-toolbar">
+			  <div class="btn-group">
+				<span class="btn"><i class="icon-envelope"></i></span>
+				<span class="btn" ><i class="icon-print"></i></span>
+				<span class="btn" ><i class="icon-zoom-in"></i></span>
+				<span class="btn" ><i class="icon-star"></i></span>
+				<span class="btn" ><i class=" icon-thumbs-up"></i></span>
+				<span class="btn" ><i class="icon-thumbs-down"></i></span>
+			  </div>
 			</div>
-		</div>	
+			</div>
+			<div class="span6">
+				<?php echo"<h3>$row[nome]</h3> "?>
+				<hr class="soft"/>
 
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
+				<?php echo"<form class='form-horizontal qtyFrm' action='addToCart.php?id=$id' method='post'>
+				  <div class='control-group'>
+					 <label class='control-label'><span>$row[prezzo]€</span></label>
+					<div class='controls'>
+					<input type='number' class='span1' placeholder='Qty.' name='Qty' value='1'/>
+					  <button type='submit' class='btn btn-large btn-primary pull-right'> Add to cart <i class=' icon-shopping-cart'></i></button>
+					</div>
+				  </div>
+				</form>";
+				?>
+				
+				<hr class="soft"/>
+				<form class="form-horizontal qtyFrm pull-right">
+				  <div class="control-group">
+					<label class="control-label"><span>Color</span></label>
+					<div class="controls">
+					  <select class="span2">
+						  <option>Black</option>
+						  <option>Red</option>
+						  <option>Blue</option>
+						  <option>Brown</option>
+						</select>
+					</div>
+				  </div>
+				</form>
+				<hr class="soft clr"/>
+				<?php echo"<p>
+				$row[descrizione]
+				</p>"?>
+				<a class="btn btn-small pull-right" href="#detail">More Details</a>
+				<br class="clr"/>
+			<a href="#" name="detail"></a>
+			<hr class="soft"/>
 			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
-		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
-		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
-		</div>
-	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
-</div>
+			
+			<div class="span9">
+            <ul id="productDetail" class="nav nav-tabs">
+              <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
+              <li><a href="#accessori" data-toggle="tab">Accessories</a></li>
+			  <li><a href="#simili" data-toggle="tab">Related Products</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+              <div class="tab-pane fade active in" id="home">
+			  <h4>Product Information</h4>
+                <table class="table table-bordered">
+				<tbody>
+				<tr class="techSpecRow"><th colspan="2">Product Details</th></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Brand: </td><td class="techSpecTD2">Fujifilm</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Model:</td><td class="techSpecTD2">FinePix S2950HD</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Released on:</td><td class="techSpecTD2"> 2011-01-28</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Dimensions:</td><td class="techSpecTD2"> 5.50" h x 5.50" w x 2.00" l, .75 pounds</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Display size:</td><td class="techSpecTD2">3</td></tr>
+				</tbody>
+				</table>
+				
+				<h5>Features</h5>
+				<p>
+				14 Megapixels. 18.0 x Optical Zoom. 3.0-inch LCD Screen. Full HD photos and 1280 x 720p HD movie capture. ISO sensitivity ISO6400 at reduced resolution. Tracking Auto Focus. Motion Panorama Mode. Face Detection technology with Blink detection and Smile and shoot mode. 4 x AA batteries not included. WxDxH 110.2 ×81.4x73.4mm. Weight 0.341kg (excluding battery and memory card). Weight 0.437kg (including battery and memory card).<br/>
+				OND363338
+				</p>
 
+				<h4>Editorial Reviews</h4>
+				<h5>Manufacturer's Description </h5>
+				<p>
+				With a generous 18x Fujinon optical zoom lens, the S2950 really packs a punch, especially when matched with its 14 megapixel sensor, large 3.0" LCD screen and 720p HD (30fps) movie capture.
+				</p>
+
+				<h5>Electric powered Fujinon 18x zoom lens</h5>
+				<p>
+				The S2950 sports an impressive 28mm – 504mm* high precision Fujinon optical zoom lens. Simple to operate with an electric powered zoom lever, the huge zoom range means that you can capture all the detail, even when you're at a considerable distance away. You can even operate the zoom during video shooting. Unlike a bulky D-SLR, bridge cameras allow you great versatility of zoom, without the hassle of carrying a bag of lenses.
+				</p>
+				<h5>Impressive panoramas</h5>
+				<p>
+				With its easy to use Panoramic shooting mode you can get creative on the S2950, however basic your skills, and rest assured that you will not risk shooting uneven landscapes or shaky horizons. The camera enables you to take three successive shots with a helpful tool which automatically releases the shutter once the images are fully aligned to seamlessly stitch the shots together in-camera. It's so easy and the results are impressive.
+				</p>
+
+				<h5>Sharp, clear shots</h5>
+				<p>
+				Even at the longest zoom settings or in the most challenging of lighting conditions, the S2950 is able to produce crisp, clean results. With its mechanically stabilised 1/2 3", 14 megapixel CCD sensor, and high ISO sensitivity settings, Fujifilm's Dual Image Stabilisation technology combines to reduce the blurring effects of both hand-shake and subject movement to provide superb pictures.
+				</p>
+              </div>
+			  <div class="tab-pane fade active in" id="simili">
+		<div id="myTab" class="pull-right">
+		 <a href="#listView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-list"></i></span></a>
+		 </div>
+		 <br class="clr"/>
+		<hr class="soft"/>
+		<div class="tab-content">
+			<div class="tab-pane active" id="listView">
+			<?php
+				$query="SELECT Categoria From prodotto where CodiceProdotto=$id";
+				$ris=$conn->query($query);
+				$row = $ris->fetch_assoc();
+			  	echo" $row[Categoria]";
+				$sql = "SELECT * FROM prodotto Where Categoria='$row[Categoria]' LIMIT 6";
+				$result = $conn->query($sql);
+				if ($result = $conn->query($sql)){
+				  while($row = $result->fetch_assoc()) {
+					echo"<hr class='soft'/>
+					<div class='row'>	  
+							<div class='span2'>
+								<img src='themes/images/products/$row[url]' alt=''/>
+							</div>
+							<div class='span4'>
+								<h3>New | Available</h3>				
+								<hr class='soft'/>
+								<h5>$row[nome] </h5>
+								<p>
+								$row[descrizione]
+								</p>
+								<a class='btn btn-small pull-right' href='product_details.php?id=$row[CodiceProdotto]'>View Details</a>
+								<br class='clr'/>
+							</div>
+							<div class='span3 alignR'>
+							<form class='form-horizontal qtyFrm'>
+								<h3>$row[prezzo]€</h3>
+								<label class='checkbox'>
+								<input type='checkbox'>  Adds product to compair
+								</label><br/>
+								<div class='btn-group'>
+								<a href='product_details.html' class='btn btn-large btn-primary'> Add to <i class=' icon-shopping-cart'></i></a>
+								<a href='product_details.php?id=$row[CodiceProdotto]' class='btn btn-large'><i class='icon-zoom-in'></i></a>
+								</div>
+							</form>
+							</div>
+					</div>";
+				  }
+				}
+				?>
+			
+			<hr class="soft"/>
+		</div>
+<div class="tab-pane fade active in" id="accessori">
+		 <br class="clr"/>
+		<hr class="soft"/>
+		<div class="tab-content">
+			<div class="tab-pane active" id="BlockView">
+				<ul class="thumbnails">
+				<?php
+				
+	  $sql = "SELECT * FROM `prodotto`
+	  INNER JOIN pa ON $id=pa.CodiceProdotto
+	  INNER JOIN accessori ON accessori.codiceAccessorio=pa.codiceAccessorio
+	  WHERE prodotto.CodiceProdotto=accessori.codiceAccessorio LIMIT 6";
+	  $result = $conn->query($sql);
+		if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+		  echo "<li class='span3'>
+		  <div class='thumbnail'>
+			<a href='product_details.php?$row[CodiceProdotto]'><img src='themes/images/products/$row[url]' alt=''/></a>
+			<div class='caption'>
+			  <h5>$row[nome]</h5>
+			  <p> 
+				$row[descrizione]
+			  </p>
+			  <h4 style='text-align:center'><a class='btn' href='product_details.php?$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href='#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
+			</div>
+		  </div>
+		</li>";
+		}
+	  } else {
+		echo "0 results";
+	  }
+?>
+				  </ul>
+			<hr class="soft"/>
+			</div>
+		</div>
+				<br class="clr">
+					 </div>
+		</div>
+          </div>
+	</div>
 </div>
-</div>
-</div>
-</div>
+</div> </div>
+</div></div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->
 	<div  id="footerSection">

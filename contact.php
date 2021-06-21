@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -54,7 +55,6 @@ function googleTranslateElementInit() {
 <div class="container">
 <div id="welcomeLine" class="row ms-auto">
 	<?Php echo"<div class='span6'>Welcome! <strong>$user</strong></div>";?>
-	<h4><a class='btn pull-right' href='logout.php'>Log out</a></h4>
 <div class="span6" >
 	<div class="pull-right">
 		<?php
@@ -76,11 +76,11 @@ function googleTranslateElementInit() {
 			  $query="SELECT COUNT(IdCarrello) as Num FROM carrello WHERE id='$idUtente'";
 			  $ris=$conn->query($query);
 			  $row = $ris->fetch_assoc();
-			  $num=$row['Num'];}
-			 echo" </div>
+			  $num=$row['Num'];
+		echo"<a href='product_summary.php'><span class='btn btn-mini btn-primary'><i class='icon-shopping-cart icon-white'></i> $row[Num] Itemes in your cart </span> </a> 
+	";}?></div>
 	</div>
-</div>";
-?>
+</div>
 <!-- Navbar ================================================== -->
 <div id="logoArea" class="navbar">
 <a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
@@ -95,20 +95,12 @@ function googleTranslateElementInit() {
 		  <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
     </form>
     <ul id="topMenu" class="nav pull-right">
-	 <li class=""><a href="special_offer.php">Specials Offer</a></li>
+	 <li class=""><a href="special_offer.html">Specials Offer</a></li>
 	 <li class=""><a href="Forum.php">Forum</a></li>
 	 <li class=""><a href="contact.php">Contact</a></li>
-	 <?php
-	 $sql = "	 SELECT utente.id,impresa.VAT FROM utente
-	 INNER JOIN impresa ON impresa.VAT=utente.Piva
-	  WHERE nick='$user'";
-	 $result = $conn->query($sql);
-	 if(isset($_SESSION["username"]) && ($result->num_rows > 0)){
-		echo"<li class=''><a href='sell.php' ><span class='btn btn-large btn-success'>Sell</span></a></li>";}
-	 if(isset($_SESSION["username"])){
-
-	 }
-	else{
+	 <?php if(isset($_SESSION["username"])){
+		echo"<li class=''><a href='sell.php' ><span class='btn btn-large btn-success'>Sell</span></a></li>";
+	}else{
 		echo"<li class=''><a href='login.php' ><span class='btn btn-large btn-success'>Login</span></a></li>";
 	}?>
     </ul>
@@ -117,177 +109,72 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
-	<div id="sidebar" class="span3">
-	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db="importexportcn";
-	
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	  }
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
 
-	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
-	  FROM `prodotto`
-	  GROUP BY Categoria";
-	  $result = $conn->query($sql);
+<div id="mainBody">
+<div class="container">
+	<hr class="soften">
+	<h1>Visit us</h1>
+	<hr class="soften"/>	
+	<div class="row">
+		<div class="span4">
+		<h4>Contact Details</h4>
+		<p>	18 Fresno,<br/> CA 93727, USA
+			<br/><br/>
+			info@bootsshop.com<br/>
+			﻿Tel 123-456-6780<br/>
+			Fax 123-456-5679<br/>
+			web:bootsshop.com
+		</p>		
+		</div>
+			
+		<div class="span4">
+		<h4>Opening Hours</h4>
+			<h5> Monday - Friday</h5>
+			<p>09:00am - 09:00pm<br/><br/></p>
+			<h5>Saturday</h5>
+			<p>09:00am - 07:00pm<br/><br/></p>
+			<h5>Sunday</h5>
+			<p>12:30pm - 06:00pm<br/><br/></p>
+		</div>
+		<div class="span4">
+		<h4>Email Us</h4>
+		<form class="form-horizontal">
+        <fieldset>
+          <div class="control-group">
+           
+              <input type="text" placeholder="name" class="input-xlarge"/>
+           
+          </div>
+		   <div class="control-group">
+           
+              <input type="text" placeholder="email" class="input-xlarge"/>
+           
+          </div>
+		   <div class="control-group">
+           
+              <input type="text" placeholder="subject" class="input-xlarge"/>
+          
+          </div>
+          <div class="control-group">
+              <textarea rows="3" id="textarea" class="input-xlarge"></textarea>
+           
+          </div>
 
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
-		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
-		if ($result->num_rows > 0) {
-		while($row = $result->fetch_assoc()) {
-		  echo "<li><a href='products.php?arg=$row[Categoria]'>$row[Categoria] [$row[Num]]</a></li>";
-		}
-	  } else {
-		echo "0 results";
-	  }
-	  
-		echo"</ul><br/>";
-		$sql="SELECT MAX(media.top) AS max,media.CodiceProdotto,media.prezzo,media.url FROM(
-			SELECT AVG(voto) AS top, prodotto.CodiceProdotto,prodotto.prezzo,prodotto.url FROM ratings INNER JOIN prodotto ON ratings.CodiceProdotto=prodotto.CodiceProdotto 
-			GROUP BY ratings.CodiceProdotto DESC ) media";
-		$result = $conn->query($sql);
-		$row=$result->fetch_assoc();
-			echo"<div class='thumbnail'>
-			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
-			<div class='caption'>
-			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
-			</div>
-		  </div><br/>";
-		?>
-			<div class="thumbnail">
-				<img src="themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
-				<div class="caption">
-				  <h5>Payment Methods</h5>
-				</div>
-			  </div>
+            <button class="btn btn-large" type="submit">Send Messages</button>
+
+        </fieldset>
+      </form>
+		</div>
 	</div>
-<!-- Sidebar end=============================================== -->
-	<div class="span9">
-    <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
-    </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
-			</div>
-		</div>	
-
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
-		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
-		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
-		</div>
-	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
-</div>
-
-</div>
-</div>
+	<div class="row">
+	<div class="span12">
+	<iframe style="width:100%; height:300; border: 0px" scrolling="no" src="https://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=18+California,+Fresno,+CA,+United+States&amp;aq=0&amp;oq=18+California+united+state&amp;sll=39.9589,-120.955336&amp;sspn=0.007114,0.016512&amp;ie=UTF8&amp;hq=&amp;hnear=18,+Fresno,+California+93727,+United+States&amp;t=m&amp;ll=36.732762,-119.695787&amp;spn=0.017197,0.100336&amp;z=14&amp;output=embed"></iframe><br />
+	<small><a href="https://maps.google.co.uk/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=18+California,+Fresno,+CA,+United+States&amp;aq=0&amp;oq=18+California+united+state&amp;sll=39.9589,-120.955336&amp;sspn=0.007114,0.016512&amp;ie=UTF8&amp;hq=&amp;hnear=18,+Fresno,+California+93727,+United+States&amp;t=m&amp;ll=36.732762,-119.695787&amp;spn=0.017197,0.100336&amp;z=14" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+	</div>
+	</div>
 </div>
 </div>
 <!-- MainBody End ============================= -->

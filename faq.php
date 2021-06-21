@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -54,7 +54,6 @@ function googleTranslateElementInit() {
 <div class="container">
 <div id="welcomeLine" class="row ms-auto">
 	<?Php echo"<div class='span6'>Welcome! <strong>$user</strong></div>";?>
-	<h4><a class='btn pull-right' href='logout.php'>Log out</a></h4>
 <div class="span6" >
 	<div class="pull-right">
 		<?php
@@ -76,11 +75,11 @@ function googleTranslateElementInit() {
 			  $query="SELECT COUNT(IdCarrello) as Num FROM carrello WHERE id='$idUtente'";
 			  $ris=$conn->query($query);
 			  $row = $ris->fetch_assoc();
-			  $num=$row['Num'];}
-			 echo" </div>
+			  $num=$row['Num'];
+		echo"<a href='product_summary.php'><span class='btn btn-mini btn-primary'><i class='icon-shopping-cart icon-white'></i> $row[Num] Itemes in your cart </span> </a> 
+	";}?></div>
 	</div>
-</div>";
-?>
+</div>
 <!-- Navbar ================================================== -->
 <div id="logoArea" class="navbar">
 <a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
@@ -95,20 +94,12 @@ function googleTranslateElementInit() {
 		  <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
     </form>
     <ul id="topMenu" class="nav pull-right">
-	 <li class=""><a href="special_offer.php">Specials Offer</a></li>
+	 <li class=""><a href="special_offer.html">Specials Offer</a></li>
 	 <li class=""><a href="Forum.php">Forum</a></li>
 	 <li class=""><a href="contact.php">Contact</a></li>
-	 <?php
-	 $sql = "	 SELECT utente.id,impresa.VAT FROM utente
-	 INNER JOIN impresa ON impresa.VAT=utente.Piva
-	  WHERE nick='$user'";
-	 $result = $conn->query($sql);
-	 if(isset($_SESSION["username"]) && ($result->num_rows > 0)){
-		echo"<li class=''><a href='sell.php' ><span class='btn btn-large btn-success'>Sell</span></a></li>";}
-	 if(isset($_SESSION["username"])){
-
-	 }
-	else{
+	 <?php if(isset($_SESSION["username"])){
+		echo"<li class=''><a href='sell.php' ><span class='btn btn-large btn-success'>Sell</span></a></li>";
+	}else{
 		echo"<li class=''><a href='login.php' ><span class='btn btn-large btn-success'>Login</span></a></li>";
 	}?>
     </ul>
@@ -116,197 +107,109 @@ function googleTranslateElementInit() {
 </div>
 </div>
 </div>
-<!-- Header End====================================================================== -->
-	<div id="sidebar" class="span3">
-	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db="importexportcn";
-	
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	  }
+<div id="mainBody">
+<div class="container">
+<h1>FAQ</h1>
+<hr class="soften"/>	
+<div class="accordion" id="accordion2">
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+		<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+		  Collapsible Group Item #1
+		</a></h4>
+	  </div>
+	  <div id="collapseOne" class="accordion-body collapse"  >
+		<div class="accordion-inner">
+			Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+			<br/><br/>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum varius dapibus. Sed hendrerit porta felis at sollicitudin. Sed at nunc ac neque semper fermentum. Proin diam sem, semper fermentum eleifend nec, viverra ac est. Sed ultricies, lectus et vehicula imperdiet, felis tortor vehicula turpis, non fermentum enim est et sapien. Nam justo mi, dignissim a euismod ut, pretium sed leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In viverra porta est, consequat elementum metus tristique a. Mauris tempus tellus a metus dapibus faucibus egestas lectus consectetur. Integer libero dolor, luctus non congue vitae, tempus ut neque. Nunc eleifend lorem quis diam pharetra sagittis. Aliquam ut dolor dui. Fusce dictum facilisis ipsum eu porttitor. In ultricies rhoncus tortor vitae tincidunt.
+			<br/><br/>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum varius dapibus. Sed hendrerit porta felis at sollicitudin. Sed at nunc ac neque semper fermentum. Proin diam sem, semper fermentum eleifend nec, viverra ac est. Sed ultricies, lectus et vehicula imperdiet, felis tortor vehicula turpis, non fermentum enim est et sapien. Nam justo mi, dignissim a euismod ut, pretium sed leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In viverra porta est, consequat elementum metus tristique a. Mauris tempus tellus a metus dapibus faucibus egestas lectus consectetur. Integer libero dolor, luctus non congue vitae, tempus ut neque. Nunc eleifend lorem quis diam pharetra sagittis. Aliquam ut dolor dui. Fusce dictum facilisis ipsum eu porttitor. In ultricies rhoncus tortor vitae tincidunt.
 
-	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
-	  FROM `prodotto`
-	  GROUP BY Categoria";
-	  $result = $conn->query($sql);
-
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
-		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
-		if ($result->num_rows > 0) {
-		while($row = $result->fetch_assoc()) {
-		  echo "<li><a href='products.php?arg=$row[Categoria]'>$row[Categoria] [$row[Num]]</a></li>";
-		}
-	  } else {
-		echo "0 results";
-	  }
-	  
-		echo"</ul><br/>";
-		$sql="SELECT MAX(media.top) AS max,media.CodiceProdotto,media.prezzo,media.url FROM(
-			SELECT AVG(voto) AS top, prodotto.CodiceProdotto,prodotto.prezzo,prodotto.url FROM ratings INNER JOIN prodotto ON ratings.CodiceProdotto=prodotto.CodiceProdotto 
-			GROUP BY ratings.CodiceProdotto DESC ) media";
-		$result = $conn->query($sql);
-		$row=$result->fetch_assoc();
-			echo"<div class='thumbnail'>
-			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
-			<div class='caption'>
-			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
-			</div>
-		  </div><br/>";
-		?>
-			<div class="thumbnail">
-				<img src="themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
-				<div class="caption">
-				  <h5>Payment Methods</h5>
-				</div>
-			  </div>
-	</div>
-<!-- Sidebar end=============================================== -->
-	<div class="span9">
-    <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
-    </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
-			</div>
-		</div>	
-
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
-		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
-		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
 		</div>
 	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
+	</div>
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+		<h4><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+		  Collapsible Group Item #2
+		</a></h4>
+	  </div>
+	  <div id="collapseTwo" class="accordion-body collapse"  >
+		<div class="accordion-inner">
+		  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
+	  </div>
+	</div>
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+		<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+		  Collapsible Group Item #3
+		</a></h4>
+	  </div>
+	  <div id="collapseThree" class="accordion-body collapse"  >
+		<div class="accordion-inner">
+		  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
+	  </div>
+	</div>
+	
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+		<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+		  Collapsible Group Item #4
+		</a></h4>
+	  </div>
+	  <div id="collapseFour" class="accordion-body collapse"  >
+		<div class="accordion-inner">
+		  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
+	  </div>
+	</div>
+	
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+		<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
+		  Collapsible Group Item #5
+		</a></h4>
+	  </div>
+	  <div id="collapseFive" class="accordion-body collapse"  >
+		<div class="accordion-inner">
+		  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
+	  </div>
+	</div>
+	
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+		<h4><a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">
+		  Collapsible Group Item #6
+		</a></h4>
+	  </div>
+	  <div id="collapseSix" class="accordion-body collapse"  >
+		<div class="accordion-inner">
+		  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
-</div>
-
-</div>
-</div>
+	  </div>
+	</div>
+  </div>
 </div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->
-	<div  id="footerSection">
+<div  id="footerSection">
 	<div class="container">
 		<div class="row">
 			<div class="span3">
 				<h5>ACCOUNT</h5>
-				<a href="login.html">YOUR ACCOUNT</a>
-				<a href="login.html">PERSONAL INFORMATION</a> 
-				<a href="login.html">ADDRESSES</a> 
-				<a href="login.html">DISCOUNT</a>  
-				<a href="login.html">ORDER HISTORY</a>
+				<a href="login.php">YOUR ACCOUNT</a>
+				<a href="login.php">PERSONAL INFORMATION</a> 
+				<a href="login.php">ADDRESSES</a> 
+				<a href="login.php">DISCOUNT</a>  
+				<a href="login.php">ORDER HISTORY</a>
 			 </div>
 			<div class="span3">
 				<h5>INFORMATION</h5>
 				<a href="contact.html">CONTACT</a>  
-				<a href="register.html">REGISTRATION</a>  
+				<a href="register.php">REGISTRATION</a>  
 				<a href="legal_notice.html">LEGAL NOTICE</a>  
 				<a href="tac.html">TERMS AND CONDITIONS</a> 
 				<a href="faq.html">FAQ</a>
@@ -321,12 +224,12 @@ function googleTranslateElementInit() {
 			 </div>
 			<div id="socialMedia" class="span3 pull-right">
 				<h5>SOCIAL MEDIA </h5>
-				<a href="#"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
-				<a href="#"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
+				<a href="https://www.facebook.com/"><img width="60" height="60" src="themes/images/facebook.png" title="facebook" alt="facebook"/></a>
+				<a href="https://www.twitter.com/"><img width="60" height="60" src="themes/images/twitter.png" title="twitter" alt="twitter"/></a>
+				<a href="https://www.youtube.com/"><img width="60" height="60" src="themes/images/youtube.png" title="youtube" alt="youtube"/></a>
 			 </div> 
 		 </div>
-		<p class="pull-right">&copy; Bootshop</p>
+		<p class="pull-right">&copy; ImportExportChina</p>
 	</div><!-- Container End -->
 	</div>
 <!-- Placed at the end of the document so the pages load faster ============================================= -->

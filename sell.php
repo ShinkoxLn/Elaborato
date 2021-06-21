@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -117,18 +117,14 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
+
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
+<!-- Sidebar ================================================== -->
 	<div id="sidebar" class="span3">
 	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db="importexportcn";
-	
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	  }
+
 
 	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
 	  FROM `prodotto`
@@ -155,7 +151,7 @@ function googleTranslateElementInit() {
 			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
 			<div class='caption'>
 			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
+				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=product_details.php?id=$row[CodiceProdotto]>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
 			</div>
 		  </div><br/>";
 		?>
@@ -169,126 +165,67 @@ function googleTranslateElementInit() {
 <!-- Sidebar end=============================================== -->
 	<div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
+		<li><a href="index.php">Home</a> <span class="divider">/</span></li>
+		<li class="active">Sell</li>
     </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
-			</div>
-		</div>	
-
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
+	<h3>Sell your Products/Services</h3>	
+	<hr class="soft"/>
+	
+	<div class="row">
+		<div class="span1"> &nbsp;</div>
+		<div class="span5">
+			<div class="well">
+			<h5>New!</h5>
+			<form action="addProduct.php" method="POST" enctype="multipart/form-data">
+			  <div class="control-group">
+				<label class="control-label" for="Title">Product Name* :</label>
+				<div class="controls">
+				  <input class="span4"  type="text" id="name" placeholder="Name" name="name">
+				</div>
+			  </div>
+			  <div class="control-group">
+				<label class="control-label" for="Title">Price* :</label>
+				<div class="controls">
+				  <input class="span4"  type="number" id="name" placeholder="Name" name="price">€
+				</div>
+				<div>
+				<label class="control-label" for="Title">Category* :</label>
+		  		<select  name="categoria">
+			  <?php 
+			  $sql = "SELECT Categoria
+	  				FROM `prodotto` GROUP BY Categoria";
+	 		 $result = $conn->query($sql);
+				if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+		  		echo "<option>$row[Categoria]</option>";
+				}
+	 		 	}
+				?>
+				</select> 
+			  <div class="control-group">
+				<label class="control-label" for="file">Images* :</label>
+				<div class="controls">
+                <input class="span4" type="file" name="file" id="file" multiple>
+				</div>
+			  </div>
+              <div class="control-group">
+              <label class="control-label" for="Content">Description* :</label>
+              <div class="controls">
+            <textarea id="txtEditor" name="msg"></textarea> 
+        </div>
+        </div>
+			  <div class="control-group">
+				<div class="controls">
+				  <button type="submit" class="btn">Sell it</button>
+				</div>
+			  </div>
+			</form>
 		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
 		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
-		</div>
-	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
+	</div>	
+	
 </div>
-
-</div>
-</div>
-</div>
+</div></div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->

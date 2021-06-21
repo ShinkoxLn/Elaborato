@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -117,25 +117,19 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
+<div id="mainBody">
+	<div class="container">
+	<div class="row">
+<!-- Sidebar ================================================== -->
 	<div id="sidebar" class="span3">
 	<?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db="importexportcn";
-	
-	// Create connection
-	$conn = new mysqli($servername, $username, $password,$db);
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	  }
 
+if(isset($_SESSION["username"])){
 	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
 	  FROM `prodotto`
 	  GROUP BY Categoria";
 	  $result = $conn->query($sql);
-
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
+		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>$num Items in your cart </a></div>";
 		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
 		if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
@@ -144,6 +138,7 @@ function googleTranslateElementInit() {
 	  } else {
 		echo "0 results";
 	  }
+	}
 	  
 		echo"</ul><br/>";
 		$sql="SELECT MAX(media.top) AS max,media.CodiceProdotto,media.prezzo,media.url FROM(
@@ -155,7 +150,7 @@ function googleTranslateElementInit() {
 			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
 			<div class='caption'>
 			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=#'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
+				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=product_details.php?id=$row[CodiceProdotto]>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
 			</div>
 		  </div><br/>";
 		?>
@@ -169,126 +164,95 @@ function googleTranslateElementInit() {
 <!-- Sidebar end=============================================== -->
 	<div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li class="active">Registration</li>
+		<li><a href="index.php">Home</a> <span class="divider">/</span></li>
+		<li class="active"> SHOPPING CART</li>
     </ul>
-	<!--RegisterFormStart-->
-	<h3> Registration</h3>	
-	<div class="well">
-	<form class="form-horizontal" action="register.php" method="POST" enctype="multipart/form-data" >
-		<h4>Please Select:</h4>
-		<div class="control-group">
-			<label class="control-label" for="Type">Type of user<sup>*</sup></label>
-			<div class="controls">
-			<select id="type" name="type" >
-				<option value="Private">Private</option>
-				<option value="Company">Company</option>
-			</select>
-			</div>
-		</div>	
-
-		<h4>Your personal information</h4>
-		<div class="control-group">
-			<label class="control-label" for="inputFname1">First name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputFname1" placeholder="First Name" name="Fname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputLnam">Last name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputLnam" placeholder="Last Name" name="Lname">
-			</div>
-		 </div>
-		 <div class="control-group">
-			<label class="control-label" for="inputNname">Nick name <sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="inputNname" placeholder="Nick Name" name="Nname">
-			</div>
-		 </div>
-		<div class="control-group">
-		<label class="control-label" for="input_email">Email <sup>*</sup></label>
-		<div class="controls">
-		  <input type="text" id="input_email" placeholder="Email" name="mail">
-		</div>
-	  </div>	  
-	<div class="control-group">
-		<label class="control-label" for="inputPassword1">Password <sup>*</sup></label>
-		<div class="controls">
-		  <input type="password" id="inputPassword1" placeholder="Password" name="pass">
-		</div>
-	  </div>	  
-		<div class="control-group">
-		<label class="control-label">Date of Birth <sup>*</sup></label>
-		<div class="controls">
-		  <input type="date" id="birthday" name="Birthday">
-		</div>
-	  </div>
-		<h4>Your address</h4>
-		<div class="control-group">
-			<label class="control-label" for="company">Company</label>
-			<div class="controls">
-			  <input type="text" id="company" placeholder="Company" name="company">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="vat">VAT Number</label>
-			<div class="controls">
-			  <input type="text" id="vat" placeholder="VAT" name="vat">
-			</div>
-		</div>
+	<?php echo"<h3>SHOPPING CART [ <small>$num Item(s) </small>]</h3>";?>
+	<hr class="soft"/>
+	<table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+				  <th>Unit Price</th>
+                  <th>Total Tax</th>
+                  <th>Total Price</th>
+				</tr>
+              </thead>
+              <tbody>
+			  <?php
+			  $query="SELECT `idCarrello`, `quantità`, `prezzo`, `id`, `CodiceProdotto` FROM `carrello` WHERE id=$idUtente";
+			  $result = $conn->query($query);
+			  $totalPrice=0;
+			  $totalTax=0;
+			  $total=0;
+			  if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+					$sql="SELECT * FROM prodotto WHERE prodotto.CodiceProdotto='$row[CodiceProdotto]'";
+					$ris=$conn->query($sql);
+					$riga=$ris->fetch_assoc();
+					$quantità=$row['quantità'];
+					$prezzo=$row['prezzo'];
+					$tax=$prezzo*0.22;
+					$final=$prezzo+$tax;
+					$totalPrice+=$prezzo;
+					$totalTax+=$tax;
+					$total=$totalPrice+$totalTax;
+				  echo "
+				  <tr>
+                  <td> <img width='60' src='themes/images/products/$riga[url]' alt=''/></td>
+                  <td>$riga[descrizione]</td>
+				  <td>
+				  $row[quantità]
+				  </td>
+                  <td>$riga[prezzo]€</td>
+                  <td> $tax €</td>
+                  <td>$final €</td>
+                </tr>
+				";
+				}
+			  }
+			  ?>
+                <tr>
+                  <td colspan="6" style="text-align:right">Total Price:	</td>
+                  <?php echo"<td>$totalPrice €</td>"?>
+                </tr>
+                 <tr>
+                  <td colspan="6" style="text-align:right">Total Tax:	</td>
+                  <?php echo"<td>$totalTax €</td>"?>
+                </tr>
+				 <tr>
+                  <?php echo"<td colspan='6' style='text-align:right'><strong>TOTAL ($totalPrice €+ $totalTax €) =</strong></td>";?>
+                  <?php echo"<td class='label label-important' style='display:block'> <strong> $total € </strong></td>";?>
+                </tr>
+				</tbody>
+            </table>
 		
-		<div class="control-group">
-			<label class="control-label" for="address">Address<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="address" placeholder="Address" name="address"/> <span>Street address, P.O. box, company name, c/o</span>
-			</div>
-		</div>
 		
-		<div class="control-group">
-			<label class="control-label" for="city">City<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="city" placeholder="City" name="city"/> 
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label" for="postcode">Zip / Postal Code<sup>*</sup></label>
-			<div class="controls">
-			  <input type="text" id="postcode" placeholder="Zip / Postal Code" name="cap"/> 
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label" for="country">Country<sup>*</sup></label>
-			<div class="controls">
-			<select id="country" name="country" >
-				<option value="Italy">Italy</option>
-				<option value="China">China</option>
-			</select>
-			</div>
-		</div>	
-		
-		<div class="control-group">
-			<label class="control-label" for="mobile">Phone Number</label>
-			<div class="controls">
-			  <input type="text"  name="mobile" id="mobile" placeholder="Mobile Phone"/> 
-			</div>
-		</div>
-	<p><sup>*</sup>Required field	</p>
-  </script>
-	<div class="control-group">
-			<div class="controls">
-				<input type="hidden" name="email_create" value="1">
-				<input type="hidden" name="is_new_customer" value="1">
-				<input class="btn btn-large btn-success" type="submit" value="Register" />
-			</div>
-		</div>		
-	</form>
+            <table class="table table-bordered">
+			<tbody>
+				 <tr>
+                  <td> 
+				<form class="form-horizontal">
+				<div class="control-group">
+				<label class="control-label"><strong> VOUCHERS CODE: </strong> </label>
+				<div class="controls">
+				<input type="text" class="input-medium" placeholder="CODE">
+				<button type="submit" class="btn"> ADD </button>
+				</div>
+				</div>
+				</form>
+				</td>
+                </tr>
+				
+			</tbody>
+			</table>
+	<a href="index.php" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
+	<a href="payment.php" class="btn btn-large pull-right">Buy <i class="icon-arrow-right"></i></a>
+	
 </div>
-
-</div>
-</div>
-</div>
+</div></div>
 </div>
 <!-- MainBody End ============================= -->
 <!-- Footer ================================================================== -->

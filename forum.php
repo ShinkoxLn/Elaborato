@@ -1,4 +1,3 @@
-﻿<!DOCTYPE html>
 <?php
 session_start();
 $user="";
@@ -10,9 +9,15 @@ $user=$_SESSION["username"];
   <head>
     <meta charset="utf-8">
     <title>ImportExportCn</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Ask online Form">
+    <meta name="keywords" content="HTML, CSS, JavaScript,Bootstrap,js,Forum,webstagram ,webdesign ,website ,web ,webdesigner ,webdevelopment">
+    <meta name="robots" content="index, nofollow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
 <!--Less styles -->
    <!-- Other Less css file //different less files has different color scheam
 	<link rel="stylesheet/less" type="text/css" href="themes/less/simplex.less">
@@ -27,7 +32,7 @@ $user=$_SESSION["username"];
     <link href="themes/css/base.css" rel="stylesheet" media="screen"/>
 <!-- Bootstrap style responsive -->	
 	<link href="themes/css/bootstrap-responsive.min.css" rel="stylesheet"/>
-	<link href="themes/css/font-awesome.css" rel="stylesheet" type="text/css">
+
 <!-- Google-code-prettify -->	
 	<link href="themes/js/google-code-prettify/prettify.css" rel="stylesheet"/>
 <!-- fav and touch icons -->
@@ -37,6 +42,11 @@ $user=$_SESSION["username"];
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="themes/images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="themes/images/ico/apple-touch-icon-57-precomposed.png">
 	<style type="text/css" id="enject"></style>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <!-- <link href="css/animate.css" rel="stylesheet" type="text/css"> -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
   </head>
 <body>
 <div id="header">
@@ -54,7 +64,6 @@ function googleTranslateElementInit() {
 <div class="container">
 <div id="welcomeLine" class="row ms-auto">
 	<?Php echo"<div class='span6'>Welcome! <strong>$user</strong></div>";?>
-	<h4><a class='btn pull-right' href='logout.php'>Log out</a></h4>
 <div class="span6" >
 	<div class="pull-right">
 		<?php
@@ -67,20 +76,11 @@ function googleTranslateElementInit() {
 			$conn = new mysqli($servername, $username, $password,$db);
 			if ($conn->connect_error) {
 				die("Connection failed: " . $conn->connect_error);
-			  }$num=0;
-			  if(isset($_SESSION["username"])){
-			  $sql = "SELECT id FROM utente WHERE utente.nick='$user'";
-			  $result = $conn->query($sql);
-			  $row = $result->fetch_assoc();
-			  $idUtente=$row['id'];
-			  $query="SELECT COUNT(IdCarrello) as Num FROM carrello WHERE id='$idUtente'";
-			  $ris=$conn->query($query);
-			  $row = $ris->fetch_assoc();
-			  $num=$row['Num'];}
-			 echo" </div>
+			  }
+  ?>
+  </div>
 	</div>
-</div>";
-?>
+</div>
 <!-- Navbar ================================================== -->
 <div id="logoArea" class="navbar">
 <a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
@@ -89,21 +89,21 @@ function googleTranslateElementInit() {
 	<span class="icon-bar"></span>
 </a>
   <div class="navbar-inner">
-    <a class="brand" href="index.php?"><img src="themes/images/logo.png" alt="Bootsshop"/></a>
+    <a class="brand" href="index.php"><img src="themes/images/logo.png" alt="Bootsshop"/></a>
 		<form class="form-inline navbar-search" method="post" action="products.php" >
 		<input id="srchFld" class="srchTxt" type="text" name="arg" />
 		  <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
     </form>
     <ul id="topMenu" class="nav pull-right">
-	 <li class=""><a href="special_offer.php">Specials Offer</a></li>
+	 <li class=""><a href="addTopic.php">Create Topic</a></li>
 	 <li class=""><a href="Forum.php">Forum</a></li>
 	 <li class=""><a href="contact.php">Contact</a></li>
-	 <?php
-	 $sql = "	 SELECT utente.id,impresa.VAT FROM utente
+	 <?php 
+   $sql = "	 SELECT utente.id,impresa.VAT FROM utente
 	 INNER JOIN impresa ON impresa.VAT=utente.Piva
 	  WHERE nick='$user'";
 	 $result = $conn->query($sql);
-	 if(isset($_SESSION["username"]) && ($result->num_rows > 0)){
+   if(isset($_SESSION["username"]) && ($result->num_rows > 0)){
 		echo"<li class=''><a href='sell.php' ><span class='btn btn-large btn-success'>Sell</span></a></li>";}
 	 if(isset($_SESSION["username"])){
 
@@ -117,191 +117,162 @@ function googleTranslateElementInit() {
 </div>
 </div>
 <!-- Header End====================================================================== -->
-<div id="carouselBlk">
-	<div id="myCarousel" class="carousel slide">
-		<div class="carousel-inner">
-		  <div class="item active">
-		  <div class="container">
-			<a href="registration.php"><img style="width:100%" src="themes/images/carousel/1.png" alt="special offers"/></a>
-			<div class="carousel-caption">
-			</div>
-		  </div>
-		  </div>
-		  <div class="item">
-		  <div class="container">
-			<a href="registration.php"><img style="width:100%" src="themes/images/carousel/2.png" alt=""/></a>
-				<div class="carousel-caption">
-				</div>
-		  </div>
-		  </div>
-		  <div class="item">
-		  <div class="container">
-			<a href="registration.php"><img src="themes/images/carousel/3.png" alt=""/></a>
-			<div class="carousel-caption">
-				</div>
-			
-		  </div>
-		  </div>
-		   <div class="item">
-		   <div class="container">
-			<a href="registration.php"><img src="themes/images/carousel/4.png" alt=""/></a>
-			<div class="carousel-caption">
-			</div>
-		   
-		  </div>
-		  </div>
-		   <div class="item">
-		   <div class="container">
-			<a href="registration.php"><img src="themes/images/carousel/5.png" alt=""/></a>
-			<div class="carousel-caption">
-		</div>
-		  </div>
-		  </div>
-		   <div class="item">
-		   <div class="container">
-			<a href="registration.php"><img src="themes/images/carousel/6.png" alt=""/></a>
-			<div class="carousel-caption">
-				</div>
-		  </div>
-		  </div>
-		</div>
-		<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
-	  </div> 
-</div>
-<div id="mainBody">
-	<div class="container">
-	<div class="row">
-<!-- Sidebar ================================================== -->
-	<div id="sidebar" class="span3">
-	<?php
+
+<!-- ======content section/body=====-->
+<section class="main-content920">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="main">
+                        <input id="tab1" type="radio" name="tabs" checked>
+                        <label for="tab1">Recent Post</label>
+                        <input id="tab2" type="radio" name="tabs">
+                        <label for="tab2">Most Popular</label>
+                        <input id="tab3" type="radio" name="tabs">
+                        <section id="content1">
+                               <!--Recent Question Content Section -->
+                        <?php
+                        $sql = "SELECT * FROM post
+                        INNER JOIN utente ON utente.id=post.id
+                        GROUP BY data DESC";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            $count=0;
+                            while($row = $result->fetch_assoc()) {
+                                $query="SELECT COUNT(idMessaggio) AS NUM FROM `messaggio` WHERE messaggio.idPost=$row[idPost]";
+                                $ris=$conn->query($query);
+                                $riga=$ris->fetch_assoc();
+                            echo"<div class='question-type2033'>
+                            <div class='row'>
+                                <div class='col-md-2'>
+                                <h5>$row[nick]</h5>
+                                    <div class='left-user12923 left-user12923-repeat'>
+                                        <a href='#'><img src='image/images.png' alt='image'></a> <a href='#'><i class='fa fa-check' aria-hidden='true'></i></a> </div>
+                                </div>
+                                
+                                <div class='col-md-8'>
+                                    <div class='right-description893'>
+                                        <div id='que-hedder2983'>
+                                            <h3><a href='post_details.php?id=$row[idPost]' target='_blank'>$row[titolo]</a></h3> </div>
+                                        <div class='ques-details10018'>
+                                            <p>$row[descrizione]</p></div>
+                                        <hr>
+                                        <div class='ques-icon-info3293'> <a href='#'><i class='fa fa-star' aria-hidden='true'> 5 </i> </a> <a href='#'><i class='fa fa-folder' aria-hidden='true'> wordpress</i></a> <a href='#'><i class='fa fa-clock-o' aria-hidden='true'>$row[data]</i></a> <a href='#'><i class='fa fa-question-circle-o' aria-hidden='true'> Question</i></a> <a href='#'><i class='fa fa-bug' aria-hidden='true'> Report</i></a> </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-2'>
+                                    <div class='ques-type302'>
+                                        <a href='#'>
+                                            <button type='button' class='q-type238'><i class='fa fa-comment' aria-hidden='true'>  $riga[NUM] Answer</i></button>
+                                        </a>
+                                        <a href='#'>
+                                            <button type='button' class='q-type23 button-ques2973'> <i class='fa fa-user-circle-o' aria-hidden='true'> $row[views] Views </i> </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                            }
+                        }
+                        ?>
+                            
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                  <li>
+                                    <a href="#" aria-label="Previous">
+                                      <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                  </li>
+                                  <li><a href="#">1</a></li>
+                                  <li><a href="#">2</a></li>
+                                  <li><a href="#">3</a></li>
+                                  <li><a href="#">4</a></li>
+                                  <li><a href="#">5</a></li>
+                                  <li>
+                                    <a href="#" aria-label="Next">
+                                      <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </nav>
+                        </section>
+                        <!--  End of content-1------>
+                        <section id="content2">
+                               <!--Popular Question Content Section -->
+                        <?php
+                        $sql = "SELECT * FROM post
+                        INNER JOIN utente ON utente.id=post.id
+                        GROUP BY post.views DESC";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            $count=0;
+                            while($row = $result->fetch_assoc()) {
+                                $query="SELECT COUNT(idMessaggio) AS NUM FROM `messaggio` WHERE messaggio.idPost=$row[idPost]";
+                                $ris=$conn->query($query);
+                                $riga=$ris->fetch_assoc();
+                            echo"<div class='question-type2033'>
+                            <div class='row'>
+                                <div class='col-md-2'>
+                                <h5>$row[nick]</h5>
+                                    <div class='left-user12923 left-user12923-repeat'>
+                                        <a href='#'><img src='image/images.png' alt='image'></a> <a href='#'><i class='fa fa-check' aria-hidden='true'></i></a> </div>
+                                </div>
+                                
+                                <div class='col-md-8'>
+                                    <div class='right-description893'>
+                                        <div id='que-hedder2983'>
+                                            <h3><a href='post_details.php?$row[idPost]' target='_blank'>$row[titolo]</a></h3> </div>
+                                        <div class='ques-details10018'>
+                                            <p>$row[descrizione]</p></div>
+                                        <hr>
+                                        <div class='ques-icon-info3293'> <a href='#'><i class='fa fa-star' aria-hidden='true'> 5 </i> </a> <a href='#'><i class='fa fa-folder' aria-hidden='true'> wordpress</i></a> <a href='#'><i class='fa fa-clock-o' aria-hidden='true'>$row[data]</i></a> <a href='#'><i class='fa fa-question-circle-o' aria-hidden='true'> Question</i></a> <a href='#'><i class='fa fa-bug' aria-hidden='true'> Report</i></a> </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-2'>
+                                    <div class='ques-type302'>
+                                        <a href='#'>
+                                            <button type='button' class='q-type238'><i class='fa fa-comment' aria-hidden='true'>  $riga[NUM] Answer</i></button>
+                                        </a>
+                                        <a href='#'>
+                                            <button type='button' class='q-type23 button-ques2973'> <i class='fa fa-user-circle-o' aria-hidden='true'> $row[views] Views </i> </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                            }
+                        }
+                        ?>
+                            
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                  <li>
+                                    <a href="#" aria-label="Previous">
+                                      <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                  </li>
+                                  <li><a href="#">1</a></li>
+                                  <li><a href="#">2</a></li>
+                                  <li><a href="#">3</a></li>
+                                  <li><a href="#">4</a></li>
+                                  <li><a href="#">5</a></li>
+                                  <li>
+                                    <a href="#" aria-label="Next">
+                                      <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </nav>
+                        </section>
+                        <!--  End of content-1------>
 
 
-	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
-	  FROM `prodotto`
-	  GROUP BY Categoria";
-	  $result = $conn->query($sql);
 
-		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>$num Items in your cart </a></div>";
-		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
-		if ($result->num_rows > 0) {
-		while($row = $result->fetch_assoc()) {
-		  echo "<li><a href='products.php?arg=$row[Categoria]'>$row[Categoria] [$row[Num]]</a></li>";
-		}
-	  } else {
-		echo "0 results";
-	  }
-	
-	  
-		echo"</ul><br/>";
-		$sql="SELECT MAX(media.top) AS max,media.CodiceProdotto,media.prezzo,media.url FROM(
-			SELECT AVG(voto) AS top, prodotto.CodiceProdotto,prodotto.prezzo,prodotto.url FROM ratings INNER JOIN prodotto ON ratings.CodiceProdotto=prodotto.CodiceProdotto 
-			GROUP BY ratings.CodiceProdotto DESC ) media";
-		$result = $conn->query($sql);
-		$row=$result->fetch_assoc();
-			echo"<div class='thumbnail'>
-			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
-			<div class='caption'>
-			  <h5>BestSeller</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=product_details.php?id=$row[CodiceProdotto]>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
-			</div>
-		  </div><br/>";
-		?>
-			<div class="thumbnail">
-				<img src="themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
-				<div class="caption">
-				  <h5>Payment Methods</h5>
-				</div>
-			  </div>
-	</div>
-<!-- Sidebar end=============================================== -->
-		<div class="span9">		
-			<div class="well well-small">
-			<h4>Featured Products</h4>
-			<div class="row-fluid">
-			<div id="featured" class="carousel slide">
-			<div class="carousel-inner">
-			  <div class="item active">
-			  <?php
 
-	$sql="SELECT * FROM prodotto";
-	$result = $conn->query($sql);
-		if ($result->num_rows > 0) {
-		$count=0;
-		while($row = $result->fetch_assoc()) {
-		 if($count%4==0){
-				echo "
-				<li class='span3'>
-		  <div class='thumbnail'>
-		  <i class='tag'></i>";
-		  if($row['url']=== ''){
-			  echo"<a href='product_details.php?id=$row[CodiceProdotto]'><img src='themes/images/products/noimage.jpg' alt=''></a>";
-		  }else{
-			echo"<a href='product_details.php?id=$row[CodiceProdotto]'><img src='themes/images/products/$row[url]' alt=''></a>";}
-			echo"<div class='caption'>
-			  <h5>$row[nome]</h5>
-			  <h4><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'>VIEW</a> <span class='pull-right'>$row[prezzo]€</span></h4>
-			</div>
-		  </div>
-		</li></ul>
-		<ul class='thumbnails'>
-		</div>
-		<div class='item'>";
-			}else{
-				echo "	<li class='span3'>
-				<div class='thumbnail'>
-				<i class='tag'></i>";
-				if($row['url']=== ''){
-				  echo"<a href='product_details.php?id=$row[CodiceProdotto]'><img src='themes/images/products/noimage.jpg' alt=''></a>";
-				}else{
-					echo"<a href='product_details.php?id=$row[CodiceProdotto]'><img src='themes/images/products/$row[url]' alt=''></a>";
-				}
-				echo"	<div class='caption'>
-					<h5>$row[nome]</h5>
-					<h4><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'>VIEW</a> <span class='pull-right'>$row[prezzo]€</span></h4>
-				  </div>
-				</div>
-			  </li>";
-			}
-			$count+=1;
-		}
-	  }
-	  ?>
-			  </div>
-			  <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
-			  <a class="right carousel-control" href="#featured" data-slide="next">›</a>
-			  </div>
-			  </div>
-		</div>
-		<h4>Latest Products </h4>
-		<ul class="thumbnails">
-		<?php
-		$sql="SELECT * FROM prodotto GROUP BY CodiceProdotto DESC Limit 8";
-	$result = $conn->query($sql);
-		if ($result->num_rows > 0) {
-		while($row = $result->fetch_assoc()) {
-			echo "<li class='span2'>
-			<div class='thumbnail'>";
-			if($row['url']=== ''){
-				echo"<a href='product_details.php?id=$row[CodiceProdotto]'><img src='themes/images/products/noimage.jpg' alt=''></a>";
-			  }else{
-				  echo"<a  href='product_details.php?id=$row[CodiceProdotto]'><img src='themes/images/products/$row[url]' alt=''/></a>";
-			  }echo"
-			  <div class='caption'>
-				<h5>$row[nome]</h5>
-				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href='product_details.php?id=$row[CodiceProdotto]'>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
-			  </div>
-			</div>
-		  </li>";
-		}
-	}
-			?>
-		</div>
-		</div>
-	</div>
-</div>
+
+                      </div></div></div>
 <!-- Footer ================================================================== -->
-	<div  id="footerSection">
+<div  id="footerSection">
 	<div class="container">
 		<div class="row">
 			<div class="span3">
@@ -396,7 +367,6 @@ function googleTranslateElementInit() {
 		<a href="themes/css/#" name="pattern18"><img src="themes/switch/images/pattern/pattern18.png" alt="bootstrap business templates"></a>
 		<a href="themes/css/#" name="pattern19"><img src="themes/switch/images/pattern/pattern19.png" alt="bootstrap business templates"></a>
 		<a href="themes/css/#" name="pattern20"><img src="themes/switch/images/pattern/pattern20.png" alt="bootstrap business templates"></a>
-		 
 	</div>
 	</div>
 </div>

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <?php
 session_start();
-$username="";
+$user="";
 if(isset($_SESSION["username"])){
-$username=$_SESSION["username"];
+$user=$_SESSION["username"];
 }
 ?>
-<html lang="en">
+<html lang="en"> 
   <head>
     <meta charset="utf-8">
-    <title>Bootshop online Shopping cart</title>
+    <title>ImportExportCn</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -40,21 +40,47 @@ $username=$_SESSION["username"];
   </head>
 <body>
 <div id="header">
+	<!-- Translate page-->
+<div id="google_translate_element" class="pull-right"></div><br><br><br>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!-- End Translate page-->	
 <div class="container">
-<div id="welcomeLine" class="row">
-<?Php echo"<div class='span6'>Welcome! <strong>$username</strong></div>";?>
-	<div class="span6">
+<div id="welcomeLine" class="row ms-auto">
+	<?Php echo"<div class='span6'>Welcome! <strong>$user</strong></div>";?>
+	<h4><a class='btn pull-right' href='logout.php'>Log out</a></h4>
+<div class="span6" >
 	<div class="pull-right">
-		<a href="product_summary.html"><span class="">Fr</span></a>
-		<a href="product_summary.html"><span class="">Es</span></a>
-		<span class="btn btn-mini">En</span>
-		<a href="product_summary.html"><span>&pound;</span></a>
-		<span class="btn btn-mini">$155.00</span>
-		<a href="product_summary.html"><span class="">$</span></a>
-		<a href="product_summary.html"><span class="btn btn-mini btn-primary"><i class="icon-shopping-cart icon-white"></i> [ 3 ] Itemes in your cart </span> </a> 
+		<?php
+			$servername = "localhost";
+			$username = "root";
+			$password = "";
+			$db="importexportcn";
+			
+			// Create connection
+			$conn = new mysqli($servername, $username, $password,$db);
+			if ($conn->connect_error) {
+				die("Connection failed: " . $conn->connect_error);
+			  }
+			  if(isset($_SESSION["username"])){
+			  $sql = "SELECT id FROM utente WHERE utente.nick='$user'";
+			  $result = $conn->query($sql);
+			  $row = $result->fetch_assoc();
+			  $idUtente=$row['id'];
+			  $query="SELECT COUNT(IdCarrello) as Num FROM carrello WHERE id='$idUtente'";
+			  $ris=$conn->query($query);
+			  $row = $ris->fetch_assoc();
+			  $num=$row['Num'];}
+			 echo" </div>
 	</div>
-	</div>
-</div>
+</div>";
+?>
 <!-- Navbar ================================================== -->
 <div id="logoArea" class="navbar">
 <a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
@@ -63,49 +89,28 @@ $username=$_SESSION["username"];
 	<span class="icon-bar"></span>
 </a>
   <div class="navbar-inner">
-    <a class="brand" href="index.html"><img src="themes/images/logo.png" alt="Bootsshop"/></a>
-		<form class="form-inline navbar-search" method="post" action="products.html" >
-		<input id="srchFld" class="srchTxt" type="text" />
-		  <select class="srchTxt">
-			<option>All</option>
-			<option>CLOTHES </option>
-			<option>FOOD AND BEVERAGES </option>
-			<option>HEALTH & BEAUTY </option>
-			<option>SPORTS & LEISURE </option>
-			<option>BOOKS & ENTERTAINMENTS </option>
-		</select> 
+    <a class="brand" href="index.php"><img src="themes/images/logo.png" alt="Bootsshop"/></a>
+		<form class="form-inline navbar-search" method="post" action="products.php" >
+		<input id="srchFld" class="srchTxt" type="text" name="arg" />
 		  <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
     </form>
     <ul id="topMenu" class="nav pull-right">
-	 <li class=""><a href="special_offer.html">Specials Offer</a></li>
-	 <li class=""><a href="normal.html">Delivery</a></li>
-	 <li class=""><a href="contact.html">Contact</a></li>
-	 <li class="">
-	 <a href="#login" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Login</span></a>
-	<div id="login" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="false" >
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">�</button>
-			<h3>Login Block</h3>
-		  </div>
-		  <div class="modal-body">
-			<form class="form-horizontal loginFrm">
-			  <div class="control-group">								
-				<input type="text" id="inputEmail" placeholder="Email">
-			  </div>
-			  <div class="control-group">
-				<input type="password" id="inputPassword" placeholder="Password">
-			  </div>
-			  <div class="control-group">
-				<label class="checkbox">
-				<input type="checkbox"> Remember me
-				</label>
-			  </div>
-			</form>		
-			<button type="submit" class="btn btn-success">Sign in</button>
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-		  </div>
-	</div>
-	</li>
+	 <li class=""><a href="special_offer.php">Specials Offer</a></li>
+	 <li class=""><a href="Forum.php">Forum</a></li>
+	 <li class=""><a href="contact.php">Contact</a></li>
+	 <?php
+	 $sql = "	 SELECT utente.id,impresa.VAT FROM utente
+	 INNER JOIN impresa ON impresa.VAT=utente.Piva
+	  WHERE nick='$user'";
+	 $result = $conn->query($sql);
+	 if(isset($_SESSION["username"]) && ($result->num_rows > 0)){
+		echo"<li class=''><a href='sell.php' ><span class='btn btn-large btn-success'>Sell</span></a></li>";}
+	 if(isset($_SESSION["username"])){
+
+	 }
+	else{
+		echo"<li class=''><a href='login.php' ><span class='btn btn-large btn-success'>Login</span></a></li>";
+	}?>
     </ul>
   </div>
 </div>
@@ -117,58 +122,38 @@ $username=$_SESSION["username"];
 	<div class="row">
 <!-- Sidebar ================================================== -->
 	<div id="sidebar" class="span3">
-		<div class="well well-small"><a id="myCart" href="product_summary.html"><img src="themes/images/ico-cart.png" alt="cart">3 Items in your cart  <span class="badge badge-warning pull-right">$155.00</span></a></div>
-		<ul id="sideManu" class="nav nav-tabs nav-stacked">
-			<li class="subMenu open"><a> ELECTRONICS [230]</a>
-				<ul>
-				<li><a class="active" href="products.html"><i class="icon-chevron-right"></i>Cameras (100) </a></li>
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Computers, Tablets & laptop (30)</a></li>
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Mobile Phone (80)</a></li>
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Sound & Vision (15)</a></li>
-				</ul>
-			</li>
-			<li class="subMenu"><a> CLOTHES [840] </a>
-			<ul style="display:none">
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Women's Clothing (45)</a></li>
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Women's Shoes (8)</a></li>												
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Women's Hand Bags (5)</a></li>	
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Men's Clothings  (45)</a></li>
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Men's Shoes (6)</a></li>												
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Kids Clothing (5)</a></li>												
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Kids Shoes (3)</a></li>												
-			</ul>
-			</li>
-			<li class="subMenu"><a>FOOD AND BEVERAGES [1000]</a>
-				<ul style="display:none">
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Angoves  (35)</a></li>
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Bouchard Aine & Fils (8)</a></li>												
-				<li><a href="products.html"><i class="icon-chevron-right"></i>French Rabbit (5)</a></li>	
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Louis Bernard  (45)</a></li>
-				<li><a href="products.html"><i class="icon-chevron-right"></i>BIB Wine (Bag in Box) (8)</a></li>												
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Other Liquors & Wine (5)</a></li>												
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Garden (3)</a></li>												
-				<li><a href="products.html"><i class="icon-chevron-right"></i>Khao Shong (11)</a></li>												
-			</ul>
-			</li>
-			<li><a href="products.html">HEALTH & BEAUTY [18]</a></li>
-			<li><a href="products.html">SPORTS & LEISURE [58]</a></li>
-			<li><a href="products.html">BOOKS & ENTERTAINMENTS [14]</a></li>
-		</ul>
-		<br/>
-		  <div class="thumbnail">
-			<img src="themes/images/products/panasonic.jpg" alt="Bootshop panasonoc New camera"/>
-			<div class="caption">
-			  <h5>Panasonic</h5>
-				<h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
+	<?php
+
+
+	  $sql = "SELECT COUNT(CodiceProdotto) as Num,Categoria
+	  FROM `prodotto`
+	  GROUP BY Categoria";
+	  $result = $conn->query($sql);
+
+		echo"<div class='well well-small'><a id='myCart' href='product_summary.php'><img src='themes/images/ico-cart.png' alt='cart'>0 Items in your cart </a></div>";
+		echo"<ul id='sideManu' class='nav nav-tabs nav-stacked'>";
+		if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+		  echo "<li><a href='products.php?arg=$row[Categoria]'>$row[Categoria] [$row[Num]]</a></li>";
+		}
+	  } else {
+		echo "0 results";
+	  }
+	  
+		echo"</ul><br/>";
+		$sql="SELECT MAX(media.top) AS max,media.CodiceProdotto,media.prezzo,media.url FROM(
+			SELECT AVG(voto) AS top, prodotto.CodiceProdotto,prodotto.prezzo,prodotto.url FROM ratings INNER JOIN prodotto ON ratings.CodiceProdotto=prodotto.CodiceProdotto 
+			GROUP BY ratings.CodiceProdotto DESC ) media";
+		$result = $conn->query($sql);
+		$row=$result->fetch_assoc();
+			echo"<div class='thumbnail'>
+			<img src='themes/images/products/$row[url]' alt='Best Seller'/>
+			<div class='caption'>
+			  <h5>BestSeller</h5>
+				<h4 style='text-align:center'><a class='btn' href='product_details.php?id=$row[CodiceProdotto]'> <i class='icon-zoom-in'></i></a> <a class='btn' href=product_details.php?id=$row[CodiceProdotto]>Add to <i class='icon-shopping-cart'></i></a> <a class='btn btn-primary' href='#'>$row[prezzo]€</a></h4>
 			</div>
-		  </div><br/>
-			<div class="thumbnail">
-				<img src="themes/images/products/kindle.png" title="Bootshop New Kindel" alt="Bootshop Kindel">
-				<div class="caption">
-				  <h5>Kindle</h5>
-				    <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">$222.00</a></h4>
-				</div>
-			  </div><br/>
+		  </div><br/>";
+		?>
 			<div class="thumbnail">
 				<img src="themes/images/payment_methods.png" title="Bootshop Payment Methods" alt="Payments Methods">
 				<div class="caption">
@@ -179,7 +164,7 @@ $username=$_SESSION["username"];
 <!-- Sidebar end=============================================== -->
 	<div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+		<li><a href="index.php">Home</a> <span class="divider">/</span></li>
 		<li class="active">Login</li>
     </ul>
 	<h3> Login</h3>	
